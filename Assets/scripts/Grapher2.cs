@@ -151,12 +151,7 @@ public class Grapher2 : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.Escape)) {
 
-            if (Canvas.activeSelf)
-            {
-                Application.Quit();
-            }
-
-            else
+            if(Canvas.activeSelf == false)
             {
                 displayMenu();
             }
@@ -169,35 +164,67 @@ public class Grapher2 : MonoBehaviour {
 		float t = Time.timeSinceLevelLoad;
 		FunctionDelegate f = functionDelegates [selection];
 		if (selection == 5 ||
-			selection == 8 ||
 			selection == 9 ||
-			selection == 10 ||
 			selection == 11) {
 			for (int i = 0; i < points.Length / 2; i++) {
 				Vector3 p = points [i].position;
-				p.y = -f(p, t, A, B, C, D);
+				p.y = -f(p, t, A, B, C, D) + 1.0f;
 				points [i].position = p;
-				Color c = points [i].color;
+				Color c = points [i].startColor;
 				c.g = p.y;
-				points [i].color = c;
+				points [i].startColor = c;
 			}
 			for (int i = points.Length/2 + 1; i < points.Length; i++) {
 				Vector3 p = points [i].position;
-				p.y = f(p, t, A, B, C, D);
+				p.y = f(p, t, A, B, C, D) + 1.0f;
 				points [i].position = p;
-				Color c = points [i].color;
+				Color c = points [i].startColor;
 				c.g = p.y;
-				points [i].color = c;
+				points [i].startColor = c;
 			}
 		}
-		else {
+
+        else if (selection == 8 || selection == 10) {
+            for (int i = 0; i < points.Length / 2; i++)
+            {
+                Vector3 p = points[i].position;
+                p.y = -f(p, t, A, B, C, D) + 2.0f;
+                points[i].position = p;
+                Color c = points[i].startColor;
+                c.g = p.y;
+                points[i].startColor = c;
+            }
+            for (int i = points.Length / 2 + 1; i < points.Length; i++)
+            {
+                Vector3 p = points[i].position;
+                p.y = f(p, t, A, B, C, D) + 2.0f;
+                points[i].position = p;
+                Color c = points[i].startColor;
+                c.g = p.y;
+                points[i].startColor = c;
+            }
+        }
+
+        else if (selection == 7)
+        {
+            for (int i = 0; i < points.Length; i++)
+            {
+                Vector3 p = points[i].position;
+                p.y = f(p, t, A, B, C, D) + 2.0f;
+                points[i].position = p;
+                Color c = points[i].startColor;
+                c.g = p.y;
+                points[i].startColor = c;
+            }
+        }
+        else {
 			for (int i = 0; i < points.Length; i++) {
 				Vector3 p = points [i].position;
 				p.y = f(p, t, A, B, C, D);
 				points [i].position = p;
-				Color c = points [i].color;
+				Color c = points [i].startColor;
 				c.g = p.y;
-				points [i].color = c;
+				points [i].startColor = c;
 			}
 		}
 		GetComponent<ParticleSystem>().SetParticles (points, points.Length);
@@ -225,29 +252,29 @@ public class Grapher2 : MonoBehaviour {
 	}
 
 	private static float Linear (Vector3 p, float t, float A, float B, float C, float D) {
-		return A * p.x;
+		return A * p.x + 1.0f;
 	}
 
 	private static float Quadratic (Vector3 p, float t, float A, float B, float C, float D) {
-		return A * p.x * p.x;
+		return A * p.x * p.x + 1.0f;
 	}
 
 	private static float Parabola (Vector3 p, float t, float A, float B, float C, float D) {
 		p.x = p.x - A;
 		p.z = p.z - B;
-		return D - C * p.x * p.x * p.z * p.z;
+		return D - C * p.x * p.x * p.z * p.z + 1.0f;
 	}
 
 	private static float Sinusoidal (Vector3 p, float t, float A, float B, float C, float D) {
-		return D + 
+		return 1.0f + 0.2f * (D + 
 			A * Mathf.Sin (4f * Mathf.PI * p.x + 4f * t) * Mathf.Sin(2f * Mathf.PI * p.z + t) +
 			B * Mathf.Cos(3f * Mathf.PI * p.z + 5f*t) * Mathf.Cos(5f * Mathf.PI * p.z + 3f*t) +
-			C * Mathf.Sin(Mathf.PI * p.x + 0.6f * t);
+			C * Mathf.Sin(Mathf.PI * p.x + 0.6f * t));
 	}
 
 	private static float Ripple (Vector3 p, float t, float A, float B, float C, float D) {
 		float squareRadius = p.x * p.x + p.z * p.z;
-		return Mathf.Sin (15f * Mathf.PI * squareRadius - 2f * t) / (2f + 100f * squareRadius);
+		return 1.0f + Mathf.Sin (15f * Mathf.PI * squareRadius - 2f * t) / (2f + 100f * squareRadius);
 	}
 
 	private static float Ellipsoid (Vector3 p, float t, float A, float B, float C, float D) {
@@ -259,7 +286,7 @@ public class Grapher2 : MonoBehaviour {
 	}
 
 	private static float EllipticParaboloid (Vector3 p, float t, float A, float B, float C, float D) {
-		return C * (p.x * p.x / (A*A) + p.z * p.z / (B * B));
+		return 1.0f + C * (p.x * p.x / (A*A) + p.z * p.z / (B * B));
 	}
 
 	private static float Cone (Vector3 p, float t, float A, float B, float C, float D) {
@@ -279,7 +306,7 @@ public class Grapher2 : MonoBehaviour {
 	}
 
 	private static float SineXY (Vector3 p, float t, float A, float B, float C, float D) {
-		return C * Mathf.Sin (A * p.x * p.z + B * t);
+		return 2.0f + C * Mathf.Sin (A * p.x * p.z + B * t);
 	}
 
 	public GameObject Canvas;
