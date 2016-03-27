@@ -6,6 +6,19 @@ public class Grapher2 : MonoBehaviour {
 
 	public Dropdown myDropdown;
 
+    int[] resArray = {40,
+        30,
+        40,
+        40, //Sinusoidal
+        40, //Ripple
+        40, //Ellipsoid
+        40, //EllipticParaboloid
+        40, //HyperbolicParaboloid
+        40, //Cone
+        40, //HyperboloidOfOneSheet
+        40, //HyperboloidOfTwoSheets
+        40, //Torus
+        40 }; //SineXY
 
 
 	void Destroy() {
@@ -19,6 +32,8 @@ public class Grapher2 : MonoBehaviour {
 
 	public void SetDropdownIndex(int index) {
 		myDropdown.value = index;
+        resolution = resArray[index];
+        
 	}
 
 	public GameObject sliderA;
@@ -128,11 +143,26 @@ public class Grapher2 : MonoBehaviour {
 	};
 
 	void Update () {
+
 		if (currentResolution != resolution ||
 			points == null) {
 			CreatePoints ();
 		}
-		textA.text = "A: "+ A.ToString ();
+
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+
+            if (Canvas.activeSelf)
+            {
+                Application.Quit();
+            }
+
+            else
+            {
+                displayMenu();
+            }
+        }
+
+        textA.text = "A: "+ A.ToString ();
 		textB.text = "B: "+ B.ToString ();
 		textC.text = "C: "+ C.ToString ();
 		textD.text = "D: "+ D.ToString ();
