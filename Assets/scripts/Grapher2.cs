@@ -107,6 +107,7 @@ public class Grapher2 : MonoBehaviour {
 
 	public FunctionOption function;
 	public int selection = 0;
+	private int currentSelection;
 
 	private delegate float FunctionDelegate (Vector3 p, float t, float A, float B, float C, float D);
 
@@ -131,10 +132,10 @@ public class Grapher2 : MonoBehaviour {
 			points == null) {
 			CreatePoints ();
 		}
-		textA.text = A.ToString ();
-		textB.text = B.ToString ();
-		textC.text = C.ToString ();
-		textD.text = D.ToString ();
+		textA.text = "A: "+ A.ToString ();
+		textB.text = "B: "+ B.ToString ();
+		textC.text = "C: "+ C.ToString ();
+		textD.text = "D: "+ D.ToString ();
 		float t = Time.timeSinceLevelLoad;
 		FunctionDelegate f = functionDelegates [selection];
 		if (selection == 5 ||
@@ -251,7 +252,28 @@ public class Grapher2 : MonoBehaviour {
 		return C * Mathf.Sin (A * p.x * p.z + B * t);
 	}
 
+	public GameObject Canvas;
+
+	public void displayGraph () {
+		Canvas.SetActive(false);
+	}
+
+	public void displayMenu() {
+		Canvas.SetActive (true);
+	}
+
+	public void resetValues() {
+		A = 1f;
+		B = 1f;
+		C = 1f;
+		D = 1f;
+	}
+
 	void printFunction (int selection) {
+		if (currentSelection != selection) {
+			resetValues ();
+			currentSelection = selection;
+		}
 		if (selection == 0) {
 			dropDown.text = "z = A*x";
 		} else if (selection == 1) {
