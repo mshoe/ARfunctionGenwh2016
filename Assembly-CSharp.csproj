@@ -48,8 +48,11 @@
      <Compile Include="Assets\scripts\Grapher1.cs" />
      <Compile Include="Assets\scripts\Grapher2.cs" />
      <Compile Include="Assets\scripts\Grapher3.cs" />
+     <Compile Include="Assets\scripts\Grapher4.cs" />
+     <Compile Include="Assets\scripts\cameraController.cs" />
+     <Compile Include="Assets\scripts\dropdown.cs" />
+     <Compile Include="Assets\scripts\followObject.cs" />
      <Compile Include="Assets\scripts\g2backup.cs" />
-     <Compile Include="Assets\scripts\ultimate.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
